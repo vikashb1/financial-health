@@ -1,0 +1,78 @@
+{
+  "AAPL": {
+    "ticker": "AAPL",
+    "top_risks": [
+      [
+        "adversely",
+        "General"
+      ],
+      [
+        "global",
+        "General"
+      ],
+      [
+        "materially",
+        "General"
+      ]
+    ],
+    "avg_sentiment": 0.046,
+    "sentiment_trend": "Stable or Improving"
+  },
+  "MSFT": {
+    "ticker": "MSFT",
+    "top_risks": [
+      [
+        "revenue",
+        "General"
+      ],
+      [
+        "devices",
+        "General"
+      ],
+      [
+        "software",
+        "General"
+      ]
+    ],
+    "avg_sentiment": 0.062,
+    "sentiment_trend": "Stable or Improving"
+  },
+  "AMZN": {
+    "ticker": "AMZN",
+    "top_risks": [
+      [
+        "sellers",
+        "General"
+      ],
+      [
+        "activities",
+        "General"
+      ],
+      [
+        "addition",
+        "General"
+      ]
+    ],
+    "avg_sentiment": 0.173,
+    "sentiment_trend": "Stable or Improving"
+  },
+  "TSLA": {
+    "ticker": "TSLA",
+    "top_risks": [
+      [
+        "production",
+        "General"
+      ],
+      [
+        "vehicles",
+        "General"
+      ],
+      [
+        "suppliers",
+        "Supply Chain"
+      ]
+    ],
+    "avg_sentiment": 0.055,
+    "sentiment_trend": "Worsening"
+  }
+}
