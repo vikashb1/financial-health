@@ -1,0 +1,31 @@
+{
+  "correlation": -0.3706,
+  "interpretation": "Negative correlation means healthier companies tend to have lower stock volatility.",
+  "company_averages": [
+    {
+      "ticker": "AAPL",
+      "overall_score": 8.191,
+      "volatility": 0.298
+    },
+    {
+      "ticker": "AMZN",
+      "overall_score": 6.766,
+      "volatility": 0.331
+    },
+    {
+      "ticker": "MSFT",
+      "overall_score": 9.129,
+      "volatility": 0.271
+    },
+    {
+      "ticker": "NVDA",
+      "overall_score": 7.369,
+      "volatility": 0.492
+    },
+    {
+      "ticker": "TSLA",
+      "overall_score": 7.01,
+      "volatility": 0.627
+    }
+  ]
+}
