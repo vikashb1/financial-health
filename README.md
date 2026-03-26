@@ -1,4 +1,5 @@
 # Financial Health Analyzer
+**Live Demo: https://financialhealth.streamlit.app**
 
 An end-to-end data analytics platform that ingests real financial data from SEC EDGAR filings, scores company financial health across four pillars, and generates plain-English reports — accessible through a web interface.
 
