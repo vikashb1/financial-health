@@ -34,6 +34,13 @@ def load_evaluation():
     except:
         return None, None
 
+def load_sectors():
+    try:
+        with open("data/mart/sectors.json", "r") as f:
+            return json.load(f)
+    except:
+        return {}
+
 def show_report(ticker, df):
     company_df = df[df["ticker"] == ticker].sort_values("year")
     if company_df.empty:
@@ -103,14 +110,44 @@ def show_evaluation():
     st.markdown("### Health Score Over Time")
     st.line_chart(eval_df.pivot(index="year", columns="ticker", values="overall_score"))
 
+def show_sector_compare(df):
+    st.markdown("## Sector Comparison")
+    st.markdown("Compare financial health across sectors and companies.")
+    st.divider()
+    sectors = load_sectors()
+    if not sectors:
+        st.warning("Sector data not found.")
+        return
+    latest_df = df.sort_values("year").groupby("ticker").last().reset_index()
+    latest_df["sector"] = latest_df["ticker"].map(sectors)
+    latest_df = latest_df.dropna(subset=["sector"])
+    st.markdown("### Average Health Score by Sector")
+    sector_avg = latest_df.groupby("sector")["overall_score"].mean().round(2).sort_values(ascending=False)
+    st.bar_chart(sector_avg)
+    st.divider()
+    st.markdown("### All Companies Ranked by Health Score")
+    ranked = latest_df[["ticker", "sector", "overall_score", "profitability_score", "cashflow_score", "debt_score", "growth_score"]].sort_values("overall_score", ascending=False).reset_index(drop=True)
+    ranked.index += 1
+    st.dataframe(ranked)
+    st.divider()
+    st.markdown("### Filter by Sector")
+    selected_sector = st.selectbox("Choose a sector", sorted(latest_df["sector"].unique()))
+    sector_df = latest_df[latest_df["sector"] == selected_sector][["ticker", "overall_score", "profitability_score", "cashflow_score", "debt_score", "growth_score"]].sort_values("overall_score", ascending=False).reset_index(drop=True)
+    sector_df.index += 1
+    st.dataframe(sector_df)
+    st.markdown(f"**Sector average: {sector_df['overall_score'].mean().round(2)} / 10**")
+
 st.title("Financial Health Analyzer")
 st.markdown("Get a plain-English financial health report for any major public company.")
-page = st.radio("Select view", ["Company Report", "Model Validation"], horizontal=True)
+page = st.radio("Select view", ["Company Report", "Sector Compare", "Model Validation"], horizontal=True)
 if page == "Company Report":
     ticker_input = st.text_input("Enter a ticker symbol", placeholder="e.g. AAPL, MSFT, AMZN, NVDA, TSLA").upper().strip()
     if ticker_input:
         with st.spinner(f"Generating report for {ticker_input}..."):
             df = load_data()
             show_report(ticker_input, df)
+elif page == "Sector Compare":
+    df = load_data()
+    show_sector_compare(df)
 elif page == "Model Validation":
     show_evaluation()
