@@ -1,5 +1,5 @@
 {
-  "correlation": -0.3706,
+  "correlation": -0.0403,
   "interpretation": "Negative correlation means healthier companies tend to have lower stock volatility.",
   "company_averages": [
     {
@@ -8,9 +8,94 @@
       "volatility": 0.298
     },
     {
+      "ticker": "ABBV",
+      "overall_score": 6.77,
+      "volatility": 0.248
+    },
+    {
+      "ticker": "AMD",
+      "overall_score": 6.39,
+      "volatility": 0.535
+    },
+    {
       "ticker": "AMZN",
       "overall_score": 6.766,
       "volatility": 0.331
+    },
+    {
+      "ticker": "BA",
+      "overall_score": 5.119,
+      "volatility": 0.426
+    },
+    {
+      "ticker": "BAC",
+      "overall_score": 7.514,
+      "volatility": 0.309
+    },
+    {
+      "ticker": "CAT",
+      "overall_score": 6.129,
+      "volatility": 0.312
+    },
+    {
+      "ticker": "COP",
+      "overall_score": 7.357,
+      "volatility": 0.378
+    },
+    {
+      "ticker": "COST",
+      "overall_score": 5.193,
+      "volatility": 0.222
+    },
+    {
+      "ticker": "CVX",
+      "overall_score": 6.269,
+      "volatility": 0.291
+    },
+    {
+      "ticker": "GOOGL",
+      "overall_score": 8.64,
+      "volatility": 0.309
+    },
+    {
+      "ticker": "GS",
+      "overall_score": 5.0,
+      "volatility": 0.303
+    },
+    {
+      "ticker": "HD",
+      "overall_score": 5.462,
+      "volatility": 0.254
+    },
+    {
+      "ticker": "INTC",
+      "overall_score": 6.516,
+      "volatility": 0.435
+    },
+    {
+      "ticker": "JNJ",
+      "overall_score": 8.105,
+      "volatility": 0.166
+    },
+    {
+      "ticker": "JPM",
+      "overall_score": 6.574,
+      "volatility": 0.277
+    },
+    {
+      "ticker": "META",
+      "overall_score": 8.8,
+      "volatility": 0.403
+    },
+    {
+      "ticker": "MRK",
+      "overall_score": 7.199,
+      "volatility": 0.234
+    },
+    {
+      "ticker": "MS",
+      "overall_score": 5.769,
+      "volatility": 0.318
     },
     {
       "ticker": "MSFT",
@@ -18,14 +103,54 @@
       "volatility": 0.271
     },
     {
+      "ticker": "NFLX",
+      "overall_score": 6.314,
+      "volatility": 0.406
+    },
+    {
+      "ticker": "NKE",
+      "overall_score": 6.486,
+      "volatility": 0.334
+    },
+    {
       "ticker": "NVDA",
       "overall_score": 7.369,
       "volatility": 0.492
     },
     {
+      "ticker": "PFE",
+      "overall_score": 6.7,
+      "volatility": 0.257
+    },
+    {
+      "ticker": "TGT",
+      "overall_score": 5.165,
+      "volatility": 0.343
+    },
+    {
       "ticker": "TSLA",
       "overall_score": 7.01,
       "volatility": 0.627
+    },
+    {
+      "ticker": "UNH",
+      "overall_score": 5.704,
+      "volatility": 0.304
+    },
+    {
+      "ticker": "WFC",
+      "overall_score": 5.791,
+      "volatility": 0.335
+    },
+    {
+      "ticker": "WMT",
+      "overall_score": 5.554,
+      "volatility": 0.218
+    },
+    {
+      "ticker": "XOM",
+      "overall_score": 5.117,
+      "volatility": 0.29
     }
   ]
 }

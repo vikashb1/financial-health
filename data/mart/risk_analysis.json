@@ -74,5 +74,220 @@
     ],
     "avg_sentiment": 0.055,
     "sentiment_trend": "Worsening"
+  },
+  "GOOGL": {
+    "ticker": "GOOGL",
+    "top_risks": [
+      [
+        "google",
+        "General"
+      ],
+      [
+        "revenues",
+        "General"
+      ],
+      [
+        "expenses",
+        "General"
+      ]
+    ],
+    "avg_sentiment": 0.068,
+    "sentiment_trend": "Stable or Improving"
+  },
+  "AMD": {
+    "ticker": "AMD",
+    "top_risks": [
+      [
+        "adversely",
+        "General"
+      ],
+      [
+        "customers",
+        "General"
+      ],
+      [
+        "materially",
+        "General"
+      ]
+    ],
+    "avg_sentiment": 0.113,
+    "sentiment_trend": "Worsening"
+  },
+  "PFE": {
+    "ticker": "PFE",
+    "top_risks": [
+      [
+        "statements",
+        "General"
+      ],
+      [
+        "audit",
+        "General"
+      ],
+      [
+        "consolidated",
+        "General"
+      ]
+    ],
+    "avg_sentiment": 0.098,
+    "sentiment_trend": "Worsening"
+  },
+  "UNH": {
+    "ticker": "UNH",
+    "top_risks": [
+      [
+        "information",
+        "General"
+      ],
+      [
+        "systems",
+        "General"
+      ],
+      [
+        "costs",
+        "General"
+      ]
+    ],
+    "avg_sentiment": -0.022,
+    "sentiment_trend": "Stable or Improving"
+  },
+  "ABBV": {
+    "ticker": "ABBV",
+    "top_risks": [
+      [
+        "abbvie",
+        "General"
+      ],
+      [
+        "intellectual",
+        "General"
+      ],
+      [
+        "intellectual property",
+        "General"
+      ]
+    ],
+    "avg_sentiment": 0.055,
+    "sentiment_trend": "Stable or Improving"
+  },
+  "WMT": {
+    "ticker": "WMT",
+    "top_risks": [
+      [
+        "sales",
+        "General"
+      ],
+      [
+        "fiscal",
+        "General"
+      ],
+      [
+        "comparable",
+        "General"
+      ]
+    ],
+    "avg_sentiment": 0.097,
+    "sentiment_trend": "Stable or Improving"
+  },
+  "TGT": {
+    "ticker": "TGT",
+    "top_risks": [
+      [
+        "adversely",
+        "General"
+      ],
+      [
+        "consumer",
+        "General"
+      ],
+      [
+        "guests",
+        "General"
+      ]
+    ],
+    "avg_sentiment": 0.039,
+    "sentiment_trend": "Stable or Improving"
+  },
+  "COST": {
+    "ticker": "COST",
+    "top_risks": [],
+    "avg_sentiment": 0.0,
+    "sentiment_trend": "Stable or Improving"
+  },
+  "HD": {
+    "ticker": "HD",
+    "top_risks": [
+      [
+        "customer",
+        "General"
+      ],
+      [
+        "customers",
+        "General"
+      ],
+      [
+        "experience",
+        "General"
+      ]
+    ],
+    "avg_sentiment": 0.016,
+    "sentiment_trend": "Stable or Improving"
+  },
+  "NKE": {
+    "ticker": "NKE",
+    "top_risks": [
+      [
+        "revenues",
+        "General"
+      ],
+      [
+        "fiscal",
+        "General"
+      ],
+      [
+        "brand",
+        "General"
+      ]
+    ],
+    "avg_sentiment": 0.032,
+    "sentiment_trend": "Worsening"
+  },
+  "COP": {
+    "ticker": "COP",
+    "top_risks": [
+      [
+        "reserves",
+        "General"
+      ],
+      [
+        "accounting",
+        "General"
+      ],
+      [
+        "costs",
+        "General"
+      ]
+    ],
+    "avg_sentiment": 0.047,
+    "sentiment_trend": "Worsening"
+  },
+  "CAT": {
+    "ticker": "CAT",
+    "top_risks": [
+      [
+        "sales",
+        "General"
+      ],
+      [
+        "billion",
+        "General"
+      ],
+      [
+        "million",
+        "General"
+      ]
+    ],
+    "avg_sentiment": 0.08,
+    "sentiment_trend": "Stable or Improving"
   }
 }
