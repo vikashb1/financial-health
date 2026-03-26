@@ -1,4 +1,4 @@
-﻿import streamlit as st
+content = '''import streamlit as st
 import duckdb
 import pandas as pd
 import json
@@ -6,9 +6,16 @@ import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
+
 st.set_page_config(page_title="Financial Health Analyzer", layout="centered")
 
-from translation import translate_profitability, translate_cashflow, translate_debt, translate_growth, translate_overall
+from translation import (
+    translate_profitability,
+    translate_cashflow,
+    translate_debt,
+    translate_growth,
+    translate_overall
+)
 
 def load_data():
     con_mart = duckdb.connect("data/mart/mart.duckdb")
@@ -17,7 +24,8 @@ def load_data():
     con_staged = duckdb.connect("data/staged/financials.duckdb")
     staged = con_staged.execute("SELECT ticker, year, revenue FROM staged_financials").df()
     con_staged.close()
-    return scores.merge(staged, on=["ticker", "year"], how="left")
+    df = scores.merge(staged, on=["ticker", "year"], how="left")
+    return df
 
 def load_risk_data():
     try:
@@ -30,14 +38,15 @@ def load_evaluation():
     try:
         df = pd.read_csv("reports/evaluation.csv")
         with open("reports/evaluation_summary.json", "r") as f:
-            return df, json.load(f)
+            summary = json.load(f)
+        return df, summary
     except:
         return None, None
 
 def show_report(ticker, df):
     company_df = df[df["ticker"] == ticker].sort_values("year")
     if company_df.empty:
-        st.error(f"No data found for {ticker}.")
+        st.error(f"No data found for {ticker}. Try AAPL, MSFT, AMZN, NVDA, or TSLA.")
         return
     latest = company_df.iloc[-1]
     st.markdown(f"## Financial Health Report - {ticker}")
@@ -49,7 +58,10 @@ def show_report(ticker, df):
     st.markdown(translate_overall(latest))
     st.divider()
     st.markdown("### Pillar Breakdown")
-    pillar_data = pd.DataFrame({"Pillar": ["Profitability", "Cash Flow", "Debt Safety", "Growth"], "Score": [latest["profitability_score"], latest["cashflow_score"], latest["debt_score"], latest["growth_score"]]})
+    pillar_data = pd.DataFrame({
+        "Pillar": ["Profitability", "Cash Flow", "Debt Safety", "Growth"],
+        "Score": [latest["profitability_score"], latest["cashflow_score"], latest["debt_score"], latest["growth_score"]]
+    })
     st.bar_chart(pillar_data.set_index("Pillar"))
     st.divider()
     st.markdown("### Profitability")
@@ -73,16 +85,18 @@ def show_report(ticker, df):
         for theme, category in rd["top_risks"]:
             st.markdown(f"- **{category}:** {theme}")
     else:
-        st.markdown("Risk analysis not available.")
+        st.markdown("Risk analysis not available for this company.")
     st.divider()
     st.markdown("### Trend Story")
     first = company_df.iloc[0]
     if pd.notna(first["revenue"]) and pd.notna(latest["revenue"]):
         rev_change = round(((latest["revenue"] - first["revenue"]) / first["revenue"]) * 100, 1)
-        st.markdown(f"Over {len(company_df)} years, **{ticker} revenue has {'grown' if rev_change > 0 else 'declined'} by {abs(rev_change)}%**.")
+        direction = "grown" if rev_change > 0 else "declined"
+        st.markdown(f"Over the past {len(company_df)} years, **{ticker} revenue has {direction} by {abs(rev_change)}%**.")
     if pd.notna(first["profit_margin"]) and pd.notna(latest["profit_margin"]):
         margin_change = round((latest["profit_margin"] - first["profit_margin"]) * 100, 1)
-        st.markdown(f"Profit margins have **{'improved' if margin_change > 0 else 'declined'} by {abs(margin_change)} percentage points**.")
+        direction = "improved" if margin_change > 0 else "declined"
+        st.markdown(f"Profit margins have **{direction} by {abs(margin_change)} percentage points** over this period.")
     st.markdown("### Overall Score Over Time")
     st.line_chart(company_df.set_index("year")["overall_score"])
 
@@ -92,16 +106,20 @@ def show_evaluation():
     st.divider()
     eval_df, summary = load_evaluation()
     if eval_df is None:
-        st.warning("Run src/evaluation.py first.")
+        st.warning("Evaluation data not found. Run src/evaluation.py first.")
         return
-    st.markdown(f"### Correlation: {summary['correlation']}")
-    st.markdown("Negative correlation means healthier companies have lower stock volatility.")
+    correlation = summary["correlation"]
+    st.markdown(f"### Correlation: {correlation}")
+    st.markdown("A negative correlation means companies with higher health scores tend to have lower stock volatility.")
     st.markdown("### Score vs Volatility by Company")
-    st.dataframe(eval_df.groupby("ticker")[["overall_score", "volatility"]].mean().round(3))
-    st.markdown("### Volatility Over Time")
-    st.line_chart(eval_df.pivot(index="year", columns="ticker", values="volatility"))
-    st.markdown("### Health Score Over Time")
-    st.line_chart(eval_df.pivot(index="year", columns="ticker", values="overall_score"))
+    company_avg = eval_df.groupby("ticker")[["overall_score", "volatility"]].mean().round(3)
+    st.dataframe(company_avg)
+    st.markdown("### Volatility Over Time by Company")
+    pivot = eval_df.pivot(index="year", columns="ticker", values="volatility")
+    st.line_chart(pivot)
+    st.markdown("### Health Score Over Time by Company")
+    pivot_score = eval_df.pivot(index="year", columns="ticker", values="overall_score")
+    st.line_chart(pivot_score)
 
 st.title("Financial Health Analyzer")
 st.markdown("Get a plain-English financial health report for any major public company.")
@@ -114,3 +132,10 @@ if page == "Company Report":
             show_report(ticker_input, df)
 elif page == "Model Validation":
     show_evaluation()
+'''
+
+with open("app.py", "w", encoding="utf-8") as f:
+    f.write(content)
+
+print("Done - app.py written successfully")
+print("Lines:", len(content.splitlines()))
