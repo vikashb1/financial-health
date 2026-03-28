@@ -11,7 +11,6 @@ from textblob import TextBlob
 HEADERS = {"User-Agent": "vikashraghavenderbabu@gmail.com"}
 
 TICKERS = {
-    # Tech
     "AAPL": "0000320193",
     "MSFT": "0000789019",
     "AMZN": "0001018724",
@@ -22,29 +21,24 @@ TICKERS = {
     "NFLX": "0001065280",
     "AMD": "0000002488",
     "INTC": "0000050863",
-    # Healthcare
     "JNJ": "0000200406",
     "PFE": "0000078003",
     "UNH": "0000731766",
     "ABBV": "0001551152",
     "MRK": "0000310158",
-    # Finance
     "JPM": "0000019617",
     "BAC": "0000070858",
     "WFC": "0000072971",
     "GS": "0000886982",
     "MS": "0000895421",
-    # Retail
     "WMT": "0000104169",
     "TGT": "0000027419",
     "COST": "0000909832",
     "HD": "0000354950",
     "NKE": "0000320187",
-    # Energy
     "XOM": "0000034088",
     "CVX": "0000093410",
     "COP": "0001163165",
-    # Industrial
     "BA": "0000012927",
     "CAT": "0000018230",
 }
@@ -117,7 +111,13 @@ def clean_text(text):
         'ability', 'future', 'impact', 'change', 'changes', 'related',
         'subject', 'following', 'number', 'period', 'year', 'years',
         'quarter', 'business', 'products', 'services', 'operations',
-        'financial', 'based', 'stock', 'market', 'operate', 'operating'
+        'financial', 'based', 'stock', 'market', 'operate', 'operating',
+        'adversely', 'materially', 'global', 'domestic', 'certain',
+        'various', 'many', 'without', 'within', 'among', 'pursuant',
+        'result', 'increase', 'decrease', 'cause', 'make', 'need',
+        'require', 'required', 'believe', 'expect', 'additional',
+        'current', 'general', 'international', 'united', 'states',
+        'together', 'others', 'however', 'although', 'therefore'
     }
     stop_words.update(custom_stops)
     tokens = word_tokenize(text)
@@ -127,7 +127,11 @@ def clean_text(text):
 def get_top_risk_themes(texts, n=10):
     if not texts:
         return []
-    vectorizer = TfidfVectorizer(max_features=100, ngram_range=(1, 2))
+    vectorizer = TfidfVectorizer(
+        max_features=200,
+        ngram_range=(2, 3),
+        min_df=1
+    )
     try:
         tfidf = vectorizer.fit_transform(texts)
         scores = tfidf.toarray().mean(axis=0)
@@ -143,18 +147,20 @@ def get_sentiment(text):
 
 def categorize_risk(theme):
     theme_lower = theme.lower()
-    if any(w in theme_lower for w in ['regulat', 'legal', 'compliance', 'government', 'legislation']):
+    if any(w in theme_lower for w in ['regulat', 'legal', 'compliance', 'government', 'legislation', 'lawsuit', 'litigation']):
         return 'Regulatory'
-    elif any(w in theme_lower for w in ['compet', 'market share', 'rival', 'competition']):
+    elif any(w in theme_lower for w in ['compet', 'market share', 'rival', 'competition', 'pricing']):
         return 'Competition'
-    elif any(w in theme_lower for w in ['supply', 'manufactur', 'component', 'vendor', 'supplier']):
+    elif any(w in theme_lower for w in ['supply', 'manufactur', 'component', 'vendor', 'supplier', 'production']):
         return 'Supply Chain'
-    elif any(w in theme_lower for w in ['cyber', 'secur', 'data', 'privacy', 'breach']):
+    elif any(w in theme_lower for w in ['cyber', 'secur', 'data', 'privacy', 'breach', 'hack', 'attack']):
         return 'Cybersecurity'
-    elif any(w in theme_lower for w in ['macroeconom', 'recession', 'inflation', 'interest', 'economic']):
+    elif any(w in theme_lower for w in ['macroeconom', 'recession', 'inflation', 'interest', 'economic', 'tariff', 'trade']):
         return 'Macroeconomic'
-    elif any(w in theme_lower for w in ['technology', 'innovat', 'cloud', 'artificial', 'intelligence']):
+    elif any(w in theme_lower for w in ['technology', 'innovat', 'cloud', 'artificial', 'intelligence', 'software']):
         return 'Technology'
+    elif any(w in theme_lower for w in ['talent', 'employee', 'workforce', 'retention', 'hiring']):
+        return 'Talent'
     else:
         return 'General'
 

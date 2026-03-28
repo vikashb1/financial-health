@@ -3,16 +3,16 @@
     "ticker": "AAPL",
     "top_risks": [
       [
-        "adversely",
+        "condition price",
         "General"
       ],
       [
-        "global",
-        "General"
+        "supply chain",
+        "Supply Chain"
       ],
       [
-        "materially",
-        "General"
+        "economic conditions",
+        "Macroeconomic"
       ]
     ],
     "avg_sentiment": 0.046,
@@ -22,15 +22,15 @@
     "ticker": "MSFT",
     "top_risks": [
       [
-        "revenue",
+        "intangible assets",
         "General"
       ],
       [
-        "devices",
+        "research development",
         "General"
       ],
       [
-        "software",
+        "amortizable intangible",
         "General"
       ]
     ],
@@ -41,15 +41,15 @@
     "ticker": "AMZN",
     "top_risks": [
       [
-        "sellers",
+        "intellectual property",
         "General"
       ],
       [
-        "activities",
+        "third parties",
         "General"
       ],
       [
-        "addition",
+        "proprietary rights",
         "General"
       ]
     ],
@@ -60,16 +60,16 @@
     "ticker": "TSLA",
     "top_risks": [
       [
-        "production",
-        "General"
-      ],
-      [
-        "vehicles",
-        "General"
-      ],
-      [
-        "suppliers",
+        "manufacturing facilities",
         "Supply Chain"
+      ],
+      [
+        "prospects condition",
+        "General"
+      ],
+      [
+        "model model",
+        "General"
       ]
     ],
     "avg_sentiment": 0.055,
@@ -79,16 +79,16 @@
     "ticker": "GOOGL",
     "top_risks": [
       [
-        "google",
+        "google network",
         "General"
       ],
       [
-        "revenues",
+        "revenues generated",
         "General"
       ],
       [
-        "expenses",
-        "General"
+        "google cloud",
+        "Technology"
       ]
     ],
     "avg_sentiment": 0.068,
@@ -98,15 +98,15 @@
     "ticker": "AMD",
     "top_risks": [
       [
-        "adversely",
+        "adverse effect",
         "General"
       ],
       [
-        "customers",
+        "material adverse",
         "General"
       ],
       [
-        "materially",
+        "material adverse effect",
         "General"
       ]
     ],
@@ -117,15 +117,15 @@
     "ticker": "PFE",
     "top_risks": [
       [
-        "statements",
+        "consolidated statements",
         "General"
       ],
       [
-        "audit",
+        "critical audit",
         "General"
       ],
       [
-        "consolidated",
+        "audit matter",
         "General"
       ]
     ],
@@ -136,15 +136,15 @@
     "ticker": "UNH",
     "top_risks": [
       [
-        "information",
+        "medical costs",
         "General"
       ],
       [
-        "systems",
+        "information systems",
         "General"
       ],
       [
-        "costs",
+        "third parties",
         "General"
       ]
     ],
@@ -155,15 +155,15 @@
     "ticker": "ABBV",
     "top_risks": [
       [
-        "abbvie",
-        "General"
-      ],
-      [
-        "intellectual",
-        "General"
-      ],
-      [
         "intellectual property",
+        "General"
+      ],
+      [
+        "adverse effect",
+        "General"
+      ],
+      [
+        "adverse effect abbvie",
         "General"
       ]
     ],
@@ -174,15 +174,15 @@
     "ticker": "WMT",
     "top_risks": [
       [
-        "sales",
+        "comparable sales",
         "General"
       ],
       [
-        "fiscal",
+        "fiscal respectively",
         "General"
       ],
       [
-        "comparable",
+        "percentage sales",
         "General"
       ]
     ],
@@ -193,15 +193,15 @@
     "ticker": "TGT",
     "top_risks": [
       [
-        "adversely",
+        "guests members",
         "General"
       ],
       [
-        "consumer",
+        "consumer preferences",
         "General"
       ],
       [
-        "guests",
+        "third parties",
         "General"
       ]
     ],
@@ -218,15 +218,15 @@
     "ticker": "HD",
     "top_risks": [
       [
-        "customer",
+        "shopping experience",
         "General"
       ],
       [
-        "customers",
+        "customer experience",
         "General"
       ],
       [
-        "experience",
+        "brand reputation",
         "General"
       ]
     ],
@@ -237,15 +237,15 @@
     "ticker": "NKE",
     "top_risks": [
       [
-        "revenues",
+        "wholesale equivalent",
         "General"
       ],
       [
-        "fiscal",
+        "brand revenues",
         "General"
       ],
       [
-        "brand",
+        "foreign currency",
         "General"
       ]
     ],
@@ -256,15 +256,15 @@
     "ticker": "COP",
     "top_risks": [
       [
-        "reserves",
+        "proved reserves",
         "General"
       ],
       [
-        "accounting",
+        "bitumen natural",
         "General"
       ],
       [
-        "costs",
+        "crude bitumen",
         "General"
       ]
     ],
@@ -275,15 +275,15 @@
     "ticker": "CAT",
     "top_risks": [
       [
-        "sales",
+        "sales volume",
         "General"
       ],
       [
-        "billion",
+        "price realization",
         "General"
       ],
       [
-        "million",
+        "energy transportation",
         "General"
       ]
     ],

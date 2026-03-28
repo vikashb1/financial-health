@@ -54,6 +54,12 @@ def load_ml_metrics():
     except:
         return None
 
+def make_chart(company_df):
+    chart_df = company_df[["year", "overall_score"]].copy()
+    chart_df["year"] = chart_df["year"].astype(int)
+    chart_df = chart_df.set_index("year").sort_index()
+    return chart_df
+
 def show_company_card(ticker, df, col):
     company_df = df[df["ticker"] == ticker].sort_values("year")
     if company_df.empty:
@@ -79,7 +85,7 @@ def show_company_card(ticker, df, col):
     col.markdown(f"**Growth ({latest['growth_score']}/10):** {translate_growth(latest)}")
     col.divider()
     col.markdown("### Score Over Time")
-    col.line_chart(company_df.set_index("year")["overall_score"])
+    col.line_chart(make_chart(company_df))
 
 def show_report(ticker, df):
     company_df = df[df["ticker"] == ticker].sort_values("year")
@@ -139,7 +145,7 @@ def show_report(ticker, df):
         margin_change = round((latest["profit_margin"] - first["profit_margin"]) * 100, 1)
         st.markdown(f"Profit margins have **{'improved' if margin_change > 0 else 'declined'} by {abs(margin_change)} percentage points**.")
     st.markdown("### Overall Score Over Time")
-    st.line_chart(company_df.set_index("year")["overall_score"])
+    st.line_chart(make_chart(company_df))
 
 def show_compare(df):
     st.markdown("## Company Comparison")
@@ -158,6 +164,7 @@ def show_compare(df):
         t1_df = df[df["ticker"] == ticker1].sort_values("year").set_index("year")["overall_score"]
         t2_df = df[df["ticker"] == ticker2].sort_values("year").set_index("year")["overall_score"]
         combined = pd.DataFrame({ticker1: t1_df, ticker2: t2_df})
+        combined.index = combined.index.astype(int)
         st.line_chart(combined)
 
 def show_evaluation():
