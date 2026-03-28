@@ -1,0 +1,35 @@
+{
+  "rf_mae": 1.027,
+  "lr_mae": 6.111,
+  "samples": 51,
+  "feature_importance": [
+    {
+      "feature": "current_score",
+      "importance": 0.47075705873277635
+    },
+    {
+      "feature": "ocf_margin",
+      "importance": 0.18891318833464607
+    },
+    {
+      "feature": "profit_margin",
+      "importance": 0.14847098624844932
+    },
+    {
+      "feature": "revenue_growth",
+      "importance": 0.07142015744962457
+    },
+    {
+      "feature": "debt_to_assets",
+      "importance": 0.05661683536571799
+    },
+    {
+      "feature": "cash_to_debt",
+      "importance": 0.05139535206285356
+    },
+    {
+      "feature": "margin_trend",
+      "importance": 0.012426421805932241
+    }
+  ]
+}

@@ -41,6 +41,19 @@ def load_sectors():
     except:
         return {}
 
+def load_predictions():
+    try:
+        return pd.read_csv("reports/predictions.csv")
+    except:
+        return None
+
+def load_ml_metrics():
+    try:
+        with open("reports/ml_metrics.json", "r") as f:
+            return json.load(f)
+    except:
+        return None
+
 def show_report(ticker, df):
     company_df = df[df["ticker"] == ticker].sort_values("year")
     if company_df.empty:
@@ -54,6 +67,14 @@ def show_report(ticker, df):
     color = "green" if score >= 8 else "orange" if score >= 6 else "red"
     st.markdown(f"### Overall Health Score: {score} / 10")
     st.markdown(translate_overall(latest))
+    predictions = load_predictions()
+    if predictions is not None:
+        row = predictions[predictions["ticker"] == ticker]
+        if not row.empty:
+            pred = row.iloc[0]["predicted_next_score"]
+            trend = row.iloc[0]["trend"]
+            arrow = "↑" if trend == "Up" else "↓" if trend == "Down" else "→"
+            st.markdown(f"**ML Prediction for next year:** {pred} / 10 {arrow}")
     st.divider()
     st.markdown("### Pillar Breakdown")
     pillar_data = pd.DataFrame({"Pillar": ["Profitability", "Cash Flow", "Debt Safety", "Growth"], "Score": [latest["profitability_score"], latest["cashflow_score"], latest["debt_score"], latest["growth_score"]]})
@@ -137,9 +158,36 @@ def show_sector_compare(df):
     st.dataframe(sector_df)
     st.markdown(f"**Sector average: {sector_df['overall_score'].mean().round(2)} / 10**")
 
+def show_ml_predictions():
+    st.markdown("## ML Predictions")
+    st.markdown("A Random Forest model trained on historical financial features predicts next year health scores.")
+    st.divider()
+    predictions = load_predictions()
+    metrics = load_ml_metrics()
+    if predictions is None:
+        st.warning("Run src/ml_model.py first.")
+        return
+    if metrics:
+        col1, col2, col3 = st.columns(3)
+        col1.metric("Model", "Random Forest")
+        col2.metric("MAE", metrics["rf_mae"])
+        col3.metric("Training Samples", metrics["samples"])
+        st.markdown("*MAE = Mean Absolute Error on a 0-10 scale. Lower is better.*")
+        st.divider()
+        st.markdown("### Feature Importance")
+        importance_df = pd.DataFrame(metrics["feature_importance"]).sort_values("importance", ascending=False)
+        st.bar_chart(importance_df.set_index("feature")["importance"])
+        st.divider()
+    st.markdown("### Predicted Next Year Scores")
+    display = predictions.copy()
+    display["trend"] = display["trend"].map({"Up": "↑ Up", "Down": "↓ Down", "Stable": "→ Stable"})
+    display = display.sort_values("predicted_next_score", ascending=False).reset_index(drop=True)
+    display.index += 1
+    st.dataframe(display)
+
 st.title("Financial Health Analyzer")
 st.markdown("Get a plain-English financial health report for any major public company.")
-page = st.radio("Select view", ["Company Report", "Sector Compare", "Model Validation"], horizontal=True)
+page = st.radio("Select view", ["Company Report", "Sector Compare", "ML Predictions", "Model Validation"], horizontal=True)
 if page == "Company Report":
     ticker_input = st.text_input("Enter a ticker symbol", placeholder="e.g. AAPL, MSFT, AMZN, NVDA, TSLA").upper().strip()
     if ticker_input:
@@ -149,5 +197,7 @@ if page == "Company Report":
 elif page == "Sector Compare":
     df = load_data()
     show_sector_compare(df)
+elif page == "ML Predictions":
+    show_ml_predictions()
 elif page == "Model Validation":
     show_evaluation()
