@@ -6,7 +6,7 @@ import sys
 import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "src"))
-st.set_page_config(page_title="Financial Health Analyzer", layout="centered")
+st.set_page_config(page_title="Financial Health Analyzer", layout="wide")
 
 from translation import translate_profitability, translate_cashflow, translate_debt, translate_growth, translate_overall
 
@@ -54,6 +54,33 @@ def load_ml_metrics():
     except:
         return None
 
+def show_company_card(ticker, df, col):
+    company_df = df[df["ticker"] == ticker].sort_values("year")
+    if company_df.empty:
+        col.error(f"No data found for {ticker}.")
+        return
+    latest = company_df.iloc[-1]
+    score = latest["overall_score"]
+    color = "🟢" if score >= 8 else "🟡" if score >= 6 else "🔴"
+    col.markdown(f"## {ticker}")
+    col.markdown(f"{color} **Overall Score: {score} / 10**")
+    col.markdown(translate_overall(latest))
+    col.divider()
+    col.markdown("### Pillar Scores")
+    pillar_data = pd.DataFrame({
+        "Pillar": ["Profitability", "Cash Flow", "Debt Safety", "Growth"],
+        "Score": [latest["profitability_score"], latest["cashflow_score"], latest["debt_score"], latest["growth_score"]]
+    })
+    col.bar_chart(pillar_data.set_index("Pillar"))
+    col.divider()
+    col.markdown(f"**Profitability ({latest['profitability_score']}/10):** {translate_profitability(latest)}")
+    col.markdown(f"**Cash Flow ({latest['cashflow_score']}/10):** {translate_cashflow(latest)}")
+    col.markdown(f"**Debt Safety ({latest['debt_score']}/10):** {translate_debt(latest)}")
+    col.markdown(f"**Growth ({latest['growth_score']}/10):** {translate_growth(latest)}")
+    col.divider()
+    col.markdown("### Score Over Time")
+    col.line_chart(company_df.set_index("year")["overall_score"])
+
 def show_report(ticker, df):
     company_df = df[df["ticker"] == ticker].sort_values("year")
     if company_df.empty:
@@ -64,8 +91,8 @@ def show_report(ticker, df):
     st.markdown(f"**Latest data year: {int(latest['year'])}**")
     st.divider()
     score = latest["overall_score"]
-    color = "green" if score >= 8 else "orange" if score >= 6 else "red"
-    st.markdown(f"### Overall Health Score: {score} / 10")
+    color = "🟢" if score >= 8 else "🟡" if score >= 6 else "🔴"
+    st.markdown(f"### {color} Overall Health Score: {score} / 10")
     st.markdown(translate_overall(latest))
     predictions = load_predictions()
     if predictions is not None:
@@ -113,6 +140,25 @@ def show_report(ticker, df):
         st.markdown(f"Profit margins have **{'improved' if margin_change > 0 else 'declined'} by {abs(margin_change)} percentage points**.")
     st.markdown("### Overall Score Over Time")
     st.line_chart(company_df.set_index("year")["overall_score"])
+
+def show_compare(df):
+    st.markdown("## Company Comparison")
+    st.markdown("Compare two companies side by side.")
+    st.divider()
+    col1, col2 = st.columns(2)
+    ticker1 = col1.text_input("First company", placeholder="e.g. AAPL").upper().strip()
+    ticker2 = col2.text_input("Second company", placeholder="e.g. MSFT").upper().strip()
+    if ticker1 and ticker2:
+        st.divider()
+        c1, c2 = st.columns(2)
+        show_company_card(ticker1, df, c1)
+        show_company_card(ticker2, df, c2)
+        st.divider()
+        st.markdown("### Head to Head — Score Over Time")
+        t1_df = df[df["ticker"] == ticker1].sort_values("year").set_index("year")["overall_score"]
+        t2_df = df[df["ticker"] == ticker2].sort_values("year").set_index("year")["overall_score"]
+        combined = pd.DataFrame({ticker1: t1_df, ticker2: t2_df})
+        st.line_chart(combined)
 
 def show_evaluation():
     st.markdown("## Model Validation")
@@ -187,15 +233,16 @@ def show_ml_predictions():
 
 st.title("Financial Health Analyzer")
 st.markdown("Get a plain-English financial health report for any major public company.")
-page = st.radio("Select view", ["Company Report", "Sector Compare", "ML Predictions", "Model Validation"], horizontal=True)
+page = st.radio("Select view", ["Company Report", "Compare", "Sector Compare", "ML Predictions", "Model Validation"], horizontal=True)
+df = load_data()
 if page == "Company Report":
     ticker_input = st.text_input("Enter a ticker symbol", placeholder="e.g. AAPL, MSFT, AMZN, NVDA, TSLA").upper().strip()
     if ticker_input:
         with st.spinner(f"Generating report for {ticker_input}..."):
-            df = load_data()
             show_report(ticker_input, df)
+elif page == "Compare":
+    show_compare(df)
 elif page == "Sector Compare":
-    df = load_data()
     show_sector_compare(df)
 elif page == "ML Predictions":
     show_ml_predictions()
