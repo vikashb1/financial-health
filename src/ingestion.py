@@ -3,7 +3,6 @@ import pandas as pd
 import duckdb
 
 TICKERS = {
-    # Tech
     "AAPL": "0000320193",
     "MSFT": "0000789019",
     "AMZN": "0001018724",
@@ -14,29 +13,24 @@ TICKERS = {
     "NFLX": "0001065280",
     "AMD": "0000002488",
     "INTC": "0000050863",
-    # Healthcare
     "JNJ": "0000200406",
     "PFE": "0000078003",
     "UNH": "0000731766",
     "ABBV": "0001551152",
     "MRK": "0000310158",
-    # Finance
     "JPM": "0000019617",
     "BAC": "0000070858",
     "WFC": "0000072971",
     "GS": "0000886982",
     "MS": "0000895421",
-    # Retail
     "WMT": "0000104169",
     "TGT": "0000027419",
     "COST": "0000909832",
     "HD": "0000354950",
     "NKE": "0000320187",
-    # Energy
     "XOM": "0000034088",
     "CVX": "0000093410",
     "COP": "0001163165",
-    # Industrial
     "BA": "0000012927",
     "CAT": "0000018230",
 }
@@ -54,8 +48,6 @@ def extract_metric(facts, col_name, metric_names):
             data = facts["facts"]["us-gaap"][metric_name]["units"]["USD"]
             df = pd.DataFrame(data)
             df = df[df["form"] == "10-K"]
-            if "start" not in df.columns:
-                df["start"] = pd.to_datetime(df["end"]) - pd.DateOffset(years=1)
             df = df.dropna(subset=["start"])
             df["start"] = pd.to_datetime(df["start"])
             df["end_dt"] = pd.to_datetime(df["end"])
@@ -79,7 +71,7 @@ def build_staged_table():
         facts = get_company_facts(cik)
 
         metrics = {
-            "revenue":             ["RevenueFromContractWithCustomerExcludingAssessedTax", "Revenues", "SalesRevenueNet"],
+            "revenue":             ["RevenueFromContractWithCustomerExcludingAssessedTax", "Revenues", "SalesRevenueNet", "RevenueFromContractWithCustomerIncludingAssessedTax"],
             "net_income":          ["NetIncomeLoss"],
             "total_assets":        ["Assets"],
             "long_term_debt":      ["LongTermDebt", "LongTermDebtNoncurrent"],
@@ -99,7 +91,7 @@ def build_staged_table():
 
         if base is not None:
             base["ticker"] = ticker
-            base = base[base["year"] >= 2019]
+            base = base[base["year"] >= 2015]
             base = base.sort_values("year")
             all_rows.append(base)
 

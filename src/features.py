@@ -8,7 +8,21 @@ def load_staged_data():
     con.close()
     return df
 
+def safe_get(row, col):
+    try:
+        val = row[col]
+        if pd.isna(val):
+            return np.nan
+        return val
+    except KeyError:
+        return np.nan
+
 def compute_features(df):
+    # Ensure all expected columns exist
+    for col in ["total_assets", "long_term_debt", "cash", "operating_cash_flow", "revenue", "net_income"]:
+        if col not in df.columns:
+            df[col] = np.nan
+
     results = []
 
     for ticker, group in df.groupby("ticker"):
@@ -23,45 +37,52 @@ def compute_features(df):
                 "year": year,
             }
 
-            # --- Profit Margin ---
-            if pd.notna(row["revenue"]) and row["revenue"] > 0:
-                features["profit_margin"] = row["net_income"] / row["revenue"]
+            revenue = safe_get(row, "revenue")
+            net_income = safe_get(row, "net_income")
+            total_assets = safe_get(row, "total_assets")
+            long_term_debt = safe_get(row, "long_term_debt")
+            cash = safe_get(row, "cash")
+            operating_cash_flow = safe_get(row, "operating_cash_flow")
+
+            # Profit Margin
+            if pd.notna(revenue) and revenue > 0 and pd.notna(net_income):
+                features["profit_margin"] = net_income / revenue
             else:
                 features["profit_margin"] = np.nan
 
-            # --- OCF Margin ---
-            if pd.notna(row["revenue"]) and row["revenue"] > 0:
-                features["ocf_margin"] = row["operating_cash_flow"] / row["revenue"]
+            # OCF Margin
+            if pd.notna(revenue) and revenue > 0 and pd.notna(operating_cash_flow):
+                features["ocf_margin"] = operating_cash_flow / revenue
             else:
                 features["ocf_margin"] = np.nan
 
-            # --- Debt to Assets ---
-            if pd.notna(row["total_assets"]) and row["total_assets"] > 0:
-                features["debt_to_assets"] = row["long_term_debt"] / row["total_assets"]
+            # Debt to Assets
+            if pd.notna(total_assets) and total_assets > 0 and pd.notna(long_term_debt):
+                features["debt_to_assets"] = long_term_debt / total_assets
             else:
                 features["debt_to_assets"] = np.nan
 
-            # --- Cash to Debt ---
-            if pd.notna(row["long_term_debt"]) and row["long_term_debt"] > 0:
-                features["cash_to_debt"] = row["cash"] / row["long_term_debt"]
+            # Cash to Debt
+            if pd.notna(long_term_debt) and long_term_debt > 0 and pd.notna(cash):
+                features["cash_to_debt"] = cash / long_term_debt
             else:
                 features["cash_to_debt"] = np.nan
 
-            # --- Revenue Growth (vs prior year) ---
+            # Revenue Growth
             if len(prev_rows) > 0:
-                prev_revenue = prev_rows.iloc[-1]["revenue"]
-                if pd.notna(prev_revenue) and prev_revenue > 0 and pd.notna(row["revenue"]):
-                    features["revenue_growth"] = (row["revenue"] - prev_revenue) / prev_revenue
+                prev_revenue = prev_rows.iloc[-1]["revenue"] if "revenue" in prev_rows.columns else np.nan
+                if pd.notna(prev_revenue) and prev_revenue > 0 and pd.notna(revenue):
+                    features["revenue_growth"] = (revenue - prev_revenue) / prev_revenue
                 else:
                     features["revenue_growth"] = np.nan
             else:
                 features["revenue_growth"] = np.nan
 
-            # --- Margin Trend (slope over available years) ---
+            # Margin Trend
             margin_series = pd.Series([
                 r["net_income"] / r["revenue"]
                 for _, r in group[group["year"] <= year].iterrows()
-                if pd.notna(r["revenue"]) and r["revenue"] > 0 and pd.notna(r["net_income"])
+                if pd.notna(r.get("revenue")) and r.get("revenue", 0) > 0 and pd.notna(r.get("net_income"))
             ])
             if len(margin_series) >= 3:
                 x = np.arange(len(margin_series))
